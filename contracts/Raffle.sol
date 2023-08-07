@@ -1,10 +1,10 @@
 // Raffle
-//People enter and pay some amount
-//Pick a random winner (verified - in a decentralized way)
-//Completely automated 
-//Use Chainlink keepers (Oracle or something like that)
+// People enter and pay some amount
+// Pick a random winner (verified - in a decentralized way)
+// Completely automated 
+// Use Chainlink keepers (Oracle or something like that)
 
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 
 // SPDX-License-Identifier: MIT
 
@@ -92,14 +92,14 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     function checkUpkeep (bytes memory /*checkData*/) public override returns (bool upkeepNeeded, bytes memory /*performData*/) {
         bool isOpen = (RaffleState.OPEN == s_raffleState);
         bool timePassed = ((block.timestamp - s_lastTimeStamp ) > i_interval);
-        bool hasPlayers = (s_players.length > 0);
+        bool hasPlayers = (s_players.length >= 0);
         bool hasBalance = address(this).balance > 0;
         upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
     }
 
     
     function performUpkeep(bytes calldata /*performData*/) external override {
-        (bool upkeepNeeded, ) = checkUpkeep(" ");
+        (bool upkeepNeeded, ) = checkUpkeep("");
         if(!upkeepNeeded){
             revert Raffle__UpkeepNotNeeded(address(this).balance, s_players.length, uint256(s_raffleState));
         }
